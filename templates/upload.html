@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/assets/css/upload.css">
+</head>
+<body>
+  <div class="header">
+    <div class="about">
+      <button class="button">Back</button>
+    </div>
+    <div style="margin: auto; order: 2;">Drag-n-Drop images anywhere!</div>
+    <div class="loginform">
+      <button class="delete button" data-target="/" data-method="DELETE" data-disabled="true">{{.Name}}, logout?</button>
+    </div>
+</div>
+<div class="gridwrapper" style="padding-top: 50px;">
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" accept="image/jpeg" name="multiplefiles" id="multiplefiles" multiple>
+        <div class="filesinfo" style=" display:flex ; flex-wrap: wrap; justify-content: center;"></div>
+    </form>
+</div>
+<script src="/assets/js/isotope.pkgd.min.js"></script>
+<script src="/assets/js/jquery-3.2.1.min.js"></script>
+<script src="/assets/js/restintag.jquery.min.js"></script>
+<script type="text/javascript">
+    var alltags = {{.Files}}
+
+    $('#multiplefiles').change(function() {
+        $('.filesinfo').html('');
+        var input = document.getElementById('multiplefiles');
+        for (var i = 0; i < input.files.length; ++i) {
+            var name = input.files.item(i).name;
+            $('.filesinfo').append('<div class="filesinfo-item '+'item'+i+'" style="margin:3%;"><img id="imgfile'+
+                i+'" height="100px"><br>'+
+                name+'<br>');
+                if (Object.values(alltags)[0] != null) {
+                    for (var j=0; j<Object.values(alltags)[0].length; j++){
+                    $('.item'+i).append(
+                        '<input type="checkbox" name="'+
+                        name+'" value="'+Object.values(alltags)[0][j]+'">'+
+                        Object.values(alltags)[0][j]+'<br>')
+                    }
+                }
+            $('.item'+i).append('<label>custom tags:</label><br><input type="text" name="'+name+'">')
+            var tmppath = (window.URL || window.webkitURL).createObjectURL(input.files[i]);
+            $('#imgfile'+i).attr('src', tmppath);  
+        };
+        $('.filesinfo').append('<input class="button" type="submit" value="Submit" style="width: 100%;">');
+    });
+
+    $('.header').on("click", ".about", function(event){
+          // var $item = $( event.currentTarget ).parent() ;
+          window.location.href = "/";
+        });
+
+    $(".delete").restintag({}, function(data) {
+        window.location.href = "/";
+        });
+
+    $('html').on("dragover", function() {
+        event.preventDefault();  
+        event.stopPropagation();
+    });
+    
+    $('html').on("dragleave", function() {
+        event.preventDefault();  
+        event.stopPropagation();
+    });
+    
+    $('html').on("drop", function(event) {
+      // pretty simple -- but not for IE :(
+      multiplefiles.files = event.originalEvent.dataTransfer.files;
+      event.preventDefault();
+    });
+</script>

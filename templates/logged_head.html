@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/assets/css/gal.css">
+</head>
+<body>
+  <div class="uberhead"></div>
+  <div class="header">
+    <div class="about hiddable">
+      <button class="button">Upload</button>
+    </div>
+    <div id="filters" class="button-group"></div>
+    <div class="loginform hiddable">
+      <button class="delete button" data-target="/" data-method="DELETE" data-disabled="true">{{.Name}}, logout?</button>
+    </div>
+  </div>
+  <div class="modshield"></div>
+  <div class="gridwrapper">
+    <div class="grid"><div class="grid-sizer"></div></div>
+  </div>
+    <script src="/assets/js/jquery-3.2.1.min.js"></script>
+  <script src="/assets/js/isotope.pkgd.min.js"></script>
+  <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
+  <script src="//npmcdn.com/isotope-packery@2/packery-mode.pkgd.js"></script>
+  <script src="/assets/js/restintag.jquery.min.js"></script>
+  <script src="/assets/js/gal.js"></script>
+  <script type="text/javascript">
+  
+    filesjson = {{.Files}}
+    tags = []
+    loggedin = false
+    
+    function getItems() {
+        var items = ""
+        for (var i=0; i<Object.keys(filesjson).length; i++){
+          filename = Object.keys(filesjson)[i]
+          items += '<div class="grid-item ' //+Object.keys(filesjson)[i].substring(0,4)+' '
+          for (var j=0; j<filesjson[filename].length; j++){
+              items += filesjson[filename][j] + " "
+              tags.push(filesjson[filename][j])
+          }
+          items += '" data-name="'+filename+'"><img src="assets/photos/'+filename
+          if (loggedin) {
+            items += '"><button class="edit button">Edit</button></div>'
+          } else {
+            items += '"></div>'
+          }
+        }
+        tags = unique(tags)
+        $.each(tags, function(i, value){
+          $('.button-group').append($('<button class="button" data-filter=".'+value+'">'+value.replace("_", " ")+'</button>'));
+        });
+      
+      return $(items) 
+      } 
+      
+      function unique(array) {  
+        return $.grep(array, function(el, index) {  
+            return index === $.inArray(el, array);  
+        }); 
+      } 
+  
+    $(window).resize( function() {
+      $(".hiddable").width() < 55 ? $(".hiddable").hide() : $(".hiddable").show();
+    });
+ 
+  </script>
+  <script type="text/javascript">
+      $(".delete").restintag({}, function(data) {
+        window.location.href = "/";
+      });
+
+      loggedin = true
+      iter = 0
+
+      $(function() {
+        $('.grid-item').each(function(){
+          var $this = $(this);
+          name = $this.data('name');
+          $this.append('<div class="tagedit"><form class="item'+iter+'" method="POST" style=" display: flex; flex-direction: column; flex-wrap: wrap; margin: auto; justify-content: space-around;">')
+          for ( v in tags ){ 
+            if (Object.values(filesjson[name]).indexOf(tags[v])>-1) {
+              $('.item'+iter).append('<div style="margin: 1%;" ><input type="checkbox" name="'+
+                        name+'" value="'+tags[v]+'" checked>'+
+                        tags[v]+'</div>')
+            } else {
+              $('.item'+iter).append('<div style="margin: 1%;"><input type="checkbox" name="'+
+                        name+'" value="'+tags[v]+'">'+
+                        tags[v]+'</div>')
+            };
+          };
+          $('.item'+iter).append('<div style="margin: 1%;"><label>custom tags:</label><br><input type="text" name="'+name+'"></div><div><button class="savetags button" type="submit" name="'+name+'">Save changes</button></div>')
+          $('.item'+iter).parent().append('<div><button class="imageremove button" name="'+name+'">Delete photo</button></div><button class="editcancel button">Cancel</button>')
+          ++iter
+        });
+
+        $('.imageremove').click(function(){
+          if (confirm("Delete photo?") == true) {
+            var obj = {}
+            obj[$(this)[0].name] = "!Remove";
+            $.post("/", obj).always(function(){
+              window.location.href = "/";
+            });
+          };
+        });
+
+        $grid.on("click", ".edit", function(event){
+          var $item = $( event.currentTarget ).parent() ;
+          $item.find('.tagedit').show();
+          $('.modshield').fadeIn(250);
+          $item.addClass('gigante');
+        });
+
+        $grid.on("click", ".editcancel", function(event){
+          var $item = $( event.currentTarget ).parent() ;
+          $item.hide();
+          $item.parent().removeClass('gigante');
+          $('.modshield').fadeOut(250);
+          $grid.isotope('layout');
+        });
+      });
+
+      $('.header').on("click", ".about", function(event){
+          window.location.href = "/upload";
+        });
+
+      $('body').on("click", ".modshield", function(event){
+        $('.logmodal').hide();
+        $('.modshield').fadeOut(250);
+        $('.gigante').removeClass('gigante');
+        $('.tagedit').hide();
+        $grid.isotope('layout');
+      });
+  </script>
+</body>

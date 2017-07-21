@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/assets/css/gal.css">
+</head>
+<body>
+    <div class="uberhead"></div>
+    <div class="header">
+      <div class="about hiddable">
+        <button class="showabout button">About</button>
+        <button class="hideabout button" style="display: none;">Back</button>
+      </div>
+      <div id="filters" class="button-group"></div>
+      <div class="loginform hiddable">
+        <button class="showmodal button">Login</button>
+      </div>
+    </div>
+    <div class="logmodal">
+      <form method="POST" style="width=100%;">
+        <input class="modalinput" type="text" placeholder="Username" name="uname" required style="width=100%;">
+        <input class="modalinput" type="password" placeholder="Password" name="pwd" required style="width=100%;">
+        <button class="button" type="submit" style="width: 100%;">Login</button>
+      </form>
+      <button class="cancellogin button">Cancel</button>
+    </div>
+    <div class="modshield"></div>
+    <div class="gridwrapper">
+      <div class="aboutmodal">
+        <div class="abouttext" style="margin: 30px;">
+          <div style="text-align: center;"><h1>About Lorem</h1></div>
+          <div style="display: flex;">
+          <div style="margin: 20px; width: 30%;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet magna rhoncus libero mattis sagittis. Quisque nec efficitur sem, nec laoreet purus. Fusce hendrerit sit amet leo nec vulputate. Nullam interdum rutrum urna et cursus. Fusce id fringilla risus. Suspendisse potenti. Donec congue, tortor a sagittis efficitur, turpis lorem tempor sem, sit amet maximus massa magna vel nisl. Suspendisse placerat diam et congue semper. Integer dolor orci, sollicitudin et luctus eget, pharetra et enim. Praesent vel ipsum pellentesque, commodo magna sed, consectetur tortor. Duis ut nunc et lectus malesuada molestie. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris iaculis faucibus quam, et varius urna volutpat sed.
+          </div>
+          <div style="margin: 20px; text-align: justify; width: 70%;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet magna rhoncus libero mattis sagittis. Quisque nec efficitur sem, nec laoreet purus. Fusce hendrerit sit amet leo nec vulputate. Nullam interdum rutrum urna et cursus. Fusce id fringilla risus. Suspendisse potenti. Donec congue, tortor a sagittis efficitur, turpis lorem tempor sem, sit amet maximus massa magna vel nisl. Suspendisse placerat diam et congue semper. Integer dolor orci, sollicitudin et luctus eget, pharetra et enim. Praesent vel ipsum pellentesque, commodo magna sed, consectetur tortor. Duis ut nunc et lectus malesuada molestie. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris iaculis faucibus quam, et varius urna volutpat sed.
+
+          Aliquam interdum sapien ante, quis feugiat diam tincidunt eget. Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut accumsan malesuada libero ac mattis. Mauris commodo tincidunt mauris, sed pulvinar ipsum pellentesque ut. Vivamus lacinia ultricies neque, eu pharetra metus elementum hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris laoreet risus mi, in tristique metus semper id. Fusce quis consectetur dui, id consequat justo. Quisque sed tortor et nunc porttitor viverra ut non massa. Quisque pretium, justo quis suscipit convallis, mauris lectus tempor mi, ac dictum lacus lectus eu nulla. Integer maximus, elit in ultrices auctor, tellus arcu efficitur nisi, tempor bibendum nisl ex eget sem.
+
+          In mattis mi quis felis condimentum lobortis. Nunc rutrum ex ligula, efficitur tempus dolor tincidunt vel. Etiam egestas mollis quam vitae pellentesque. Sed magna sapien, euismod in tortor sit amet, venenatis egestas nunc. Proin fringilla vulputate nisi ut porta. Nam dolor ante, varius et est id, semper porttitor augue. Integer finibus, sem quis venenatis sagittis, nisi nibh aliquet ante, non auctor tortor nibh eget magna.
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid"><div class="grid-sizer"></div></div>
+    </div>
+  <!-- header closing /div and opening script tag in body file -->
+  <script src="/assets/js/jquery-3.2.1.min.js"></script>
+  <script src="/assets/js/isotope.pkgd.min.js"></script>
+  <script src="/assets/js/imagesloaded.pkgd.min.js"></script>
+  <script src="//npmcdn.com/isotope-packery@2/packery-mode.pkgd.js"></script>
+  <script src="/assets/js/restintag.jquery.min.js"></script>
+  <script src="/assets/js/gal.js"></script>
+  <script type="text/javascript">
+
+  filesjson = {{.Files}}
+  tags = []
+  loggedin = false
+  
+  function getItems() {
+    var items = ""
+    for (var i=0; i<Object.keys(filesjson).length; i++){
+      filename = Object.keys(filesjson)[i]
+      items += '<div class="grid-item '
+      for (var j=0; j<filesjson[filename].length; j++){
+          items += filesjson[filename][j] + " "
+          tags.push(filesjson[filename][j])
+      }
+      items += '" data-name="'+filename+'"><img src="assets/photos/'+filename
+      if (loggedin) {
+        items += '"><button class="edit button">Edit</button></div>'
+      } else {
+        items += '"></div>'
+      }
+    }
+    tags = unique(tags)
+    $.each(tags, function(i, value){
+      $('.button-group').append($('<button class="button" data-filter=".'+value+'">'+value.replace("_", " ")+'</button>'));
+    });
+  
+    return $(items)
+  }
+  
+  function unique(array) {
+      return $.grep(array, function(el, index) {
+          return index === $.inArray(el, array);
+      });
+  }
+
+  $(window).resize( function() {
+    $(".hiddable").width() < 60 ? $(".hiddable").hide() : $(".hiddable").show();
+  });
+
+  </script>
+
+  {{if .Name}}
+    <script type="text/javascript">
+      window.alert({{.Name}})
+    </script>
+  {{end}}
+  <script type="text/javascript">
+    $('.loginform').on("click", ".showmodal", function(event){
+      $('.logmodal').show();
+      $('.modshield').fadeIn(250);
+      $('.logmodal form input[name="uname"]').focus();
+    });
+
+    $('.logmodal').on("click", ".cancellogin", function(event){
+      $('.logmodal').hide();
+      $('.modshield').fadeOut(250);
+    });
+
+    $('.about').on("click", ".showabout", function(event){
+      $('.aboutmodal').fadeIn(250);
+      $('.hideabout').fadeIn(250);
+      $('.showabout').hide();
+    });
+
+    $('.about').on("click", ".hideabout", function(event){
+      $('.aboutmodal').fadeOut(250);
+      $('.hideabout').hide();
+      $('.showabout').fadeIn(250);
+    });
+
+    $('.button-group').on("click", ".button", function(event){
+      $('.aboutmodal').fadeOut(250);
+      $('.hideabout').hide();
+      $('.showabout').show();
+    });
+
+    $('body').on("click", ".modshield", function(event){
+      $('.logmodal').hide();
+      $('.modshield').fadeOut(250);
+      $('.gigante').removeClass('gigante');
+      $grid.isotope('layout');
+    });
+
+  </script>
+</body>
