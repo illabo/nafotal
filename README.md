@@ -36,5 +36,5 @@ This util made to manage website admins. Run it with `-adduser=username` flag to
 
 ## Notes
 Images dosen't keep the order and shown as they load by intention. To change this behaviour visit Isotope web-page FAQ.
-Cookies invalidates on every server restart as new cookie store secret key generater on every init.
+Cookies invalidates on every server restart as new cookie store secret key generated on every init.
 Photos are resize on upload with **libvips**.
