@@ -3,9 +3,6 @@
 }
 
 /* force scroll bar */
-html {
-  overflow-y: scroll;
-}
 
 /*body { font-family: sans-serif; display: flex; flex: 1; flex-direction: row;}*/
 body {
@@ -87,7 +84,7 @@ input {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  overflow-y: scroll;
+  overflow-y: auto;
   z-index: 15;
 }
 
@@ -104,7 +101,6 @@ input {
   margin: 0px auto;
   display: flex;
   flex: 1;
-  overflow-y: scroll; 
   /*overflow: hidden;*/
   flex-flow: row;
   justify-content: center;
@@ -387,7 +383,7 @@ input {
     margin: 0px auto;
     display: flex;
     flex: 1;
-    overflow-y: scroll;/* overflow: hidden; */
+/* overflow: hidden; */
     flex-flow: row;
     justify-content: center;
   }
@@ -584,7 +580,6 @@ input {
   .gridwrapper {
     height: 95%;
     max-width: 80%;
-    overflow-y: scroll;
     margin: auto;
     margin-left: 0%;
   }
@@ -592,7 +587,7 @@ input {
   .grid {
     width: 100%;
     background: none;
-    overflow-y: scroll;
+    overflow: auto;
     height: 100% !important;
   }
 
