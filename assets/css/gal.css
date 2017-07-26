@@ -259,7 +259,7 @@ input {
 
   /*flex: 1;*/
 
-  /*overflow: auto;*/
+ 
 }
 
 /* clear fix */
@@ -383,7 +383,7 @@ input {
     margin: 0px auto;
     display: flex;
     flex: 1;
-/* overflow: hidden; */
+ overflow-y: scroll; 
     flex-flow: row;
     justify-content: center;
   }
@@ -404,6 +404,7 @@ input {
     width: 100%;
     background: #DDD;
     height: 100% !important;
+     overflow: revert;
   }
 
   /* clear fix */
@@ -582,6 +583,7 @@ input {
     max-width: 80%;
     margin: auto;
     margin-left: 0%;
+    overflow: revert;
   }
 
   .grid {
